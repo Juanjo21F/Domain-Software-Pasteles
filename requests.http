@@ -1,0 +1,56 @@
+### Cliente HTTP de IntelliJ / VS Code (extensión REST Client).
+### 1) Inicie sesión en AuthCore y pegue el token aquí. NO escriba credenciales en este archivo.
+@token = PEGUE_AQUI_EL_JWT_DE_AUTHCORE
+@base = http://localhost:8082
+
+### HU-8 Crear producto (ADMIN)
+POST {{base}}/api/productos
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "codigo": "TOR-001", "nombre": "Torta de chocolate", "categoria": "Tortas", "precio": 45000, "stock": 10 }
+
+### HU-8 Listar solo activos
+GET {{base}}/api/productos?soloActivos=true
+Authorization: Bearer {{token}}
+
+### HU-8 Modificar (ADMIN)
+PUT {{base}}/api/productos/TOR-001
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "nombre": "Torta de chocolate grande", "categoria": "Tortas", "precio": 52000 }
+
+### HU-8 Desactivar (ADMIN)
+PATCH {{base}}/api/productos/TOR-001/desactivar
+Authorization: Bearer {{token}}
+
+### HU-9 Registrar cliente
+POST {{base}}/api/clientes
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "documento": "1090123456", "nombre": "Ana Pérez", "telefono": "3001234567", "correo": "ana@correo.com" }
+
+### HU-9 Buscar cliente por documento
+GET {{base}}/api/clientes/1090123456
+Authorization: Bearer {{token}}
+
+### HU-10 / HU-11 Emitir factura (descuenta stock)
+POST {{base}}/api/facturas
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "clienteDocumento": "1090123456", "lineas": [ { "codigoProducto": "TOR-001", "cantidad": 2 } ] }
+
+### Consultar factura
+GET {{base}}/api/facturas/FAC-2026-000001
+Authorization: Bearer {{token}}
+
+### Anular factura (ADMIN, devuelve el stock)
+POST {{base}}/api/facturas/FAC-2026-000001/anulacion
+Authorization: Bearer {{token}}
+
+### HU-12 Reporte mensual (ADMIN)
+GET {{base}}/api/reportes/ventas-mensuales?anio=2026&mes=10
+Authorization: Bearer {{token}}
